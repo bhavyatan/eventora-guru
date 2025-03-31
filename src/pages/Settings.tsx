@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,8 +14,22 @@ import {
   Save,
   BrainCircuit
 } from "lucide-react";
+import { useTheme } from "@/components/ThemeProvider";
+import { useEffect, useState } from "react";
 
 const Settings = () => {
+  const { theme, setTheme } = useTheme();
+  const [selectedTheme, setSelectedTheme] = useState(theme);
+
+  useEffect(() => {
+    setSelectedTheme(theme);
+  }, [theme]);
+
+  const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newTheme = e.target.value as "light" | "dark" | "system";
+    setTheme(newTheme);
+  };
+
   return (
     <div className="space-y-8">
       <div>
@@ -91,10 +104,12 @@ const Settings = () => {
                 <select 
                   id="theme" 
                   className="w-full rounded-md border border-input bg-background px-3 py-2"
+                  value={selectedTheme}
+                  onChange={handleThemeChange}
                 >
-                  <option>Light</option>
-                  <option>Dark</option>
-                  <option>System</option>
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                  <option value="system">System</option>
                 </select>
               </div>
               
