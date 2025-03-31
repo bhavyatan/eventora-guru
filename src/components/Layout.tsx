@@ -1,5 +1,5 @@
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import Sidebar from "./Sidebar";
 import { ThemeToggle } from "./ThemeToggle";
 import { useTheme } from "./ThemeProvider";
@@ -10,14 +10,6 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const { theme } = useTheme();
-
-  // Apply accent color from localStorage on component mount
-  useEffect(() => {
-    const storedAccent = localStorage.getItem("accentColor");
-    if (storedAccent) {
-      document.documentElement.style.setProperty("--accent-color", storedAccent);
-    }
-  }, []);
 
   return (
     <div className={`flex min-h-screen bg-background ${theme === 'dark' ? 'text-gray-100' : 'text-gray-900'}`}>

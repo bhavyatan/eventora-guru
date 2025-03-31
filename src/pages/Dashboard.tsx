@@ -2,6 +2,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { 
   Calendar, 
   Users, 
@@ -18,6 +20,13 @@ import {
 } from "lucide-react";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
+  const handleCreateNewEvent = () => {
+    navigate("/setup");
+    toast.success("New event creation initiated");
+  };
+
   // Mock data for upcoming events
   const upcomingEvents = [
     {
@@ -80,7 +89,7 @@ const Dashboard = () => {
             Manage your virtual events with AI assistance
           </p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={handleCreateNewEvent}>
           <Calendar className="h-4 w-4" />
           Schedule New Event
         </Button>

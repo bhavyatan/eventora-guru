@@ -1,12 +1,37 @@
 
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 import { Calendar as CalendarIcon, Clock, Users, MapPin, Calendar, Plus } from "lucide-react";
 
 const EventSetup = () => {
+  const [eventName, setEventName] = useState("");
+  const [eventType, setEventType] = useState("webinar");
+  const [description, setDescription] = useState("");
+
+  const handleSaveEvent = () => {
+    if (!eventName.trim()) {
+      toast.error("Please enter an event name");
+      return;
+    }
+    
+    // Here you would typically save the event data
+    console.log("Saving event:", { eventName, eventType, description });
+    
+    // Show success message
+    toast.success("Event created successfully!", {
+      description: `${eventName} has been added to your events.`
+    });
+    
+    // Reset form
+    setEventName("");
+    setDescription("");
+  };
+
   return (
     <div className="space-y-8">
       <div>
@@ -32,13 +57,20 @@ const EventSetup = () => {
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <label htmlFor="event-name" className="text-sm font-medium">Event Name</label>
-                  <Input id="event-name" placeholder="Enter event name" />
+                  <Input 
+                    id="event-name" 
+                    placeholder="Enter event name" 
+                    value={eventName}
+                    onChange={(e) => setEventName(e.target.value)}
+                  />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="event-type" className="text-sm font-medium">Event Type</label>
                   <select 
                     id="event-type" 
                     className="w-full rounded-md border border-input bg-background px-3 py-2"
+                    value={eventType}
+                    onChange={(e) => setEventType(e.target.value)}
                   >
                     <option value="webinar">Webinar</option>
                     <option value="conference">Conference</option>
@@ -50,7 +82,13 @@ const EventSetup = () => {
 
               <div className="space-y-2">
                 <label htmlFor="description" className="text-sm font-medium">Description</label>
-                <Textarea id="description" placeholder="Describe your event" rows={4} />
+                <Textarea 
+                  id="description" 
+                  placeholder="Describe your event" 
+                  rows={4} 
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">
@@ -75,6 +113,10 @@ const EventSetup = () => {
                   </Button>
                 </div>
               </div>
+
+              <Button className="w-full" onClick={handleSaveEvent}>
+                Create Event
+              </Button>
             </CardContent>
           </Card>
 

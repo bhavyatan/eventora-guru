@@ -7,7 +7,6 @@ import {
   BarChart,
   Video,
   Zap,
-  PlusCircle,
   Home,
   Settings,
   Menu
@@ -17,7 +16,6 @@ import {
   SheetContent,
   SheetTrigger
 } from "@/components/ui/sheet";
-import { toast } from "sonner";
 import { useTheme } from "./ThemeProvider";
 
 const navItems = [
@@ -50,13 +48,7 @@ const navItems = [
 
 const Sidebar = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const { theme } = useTheme();
-  
-  const handleCreateNewEvent = () => {
-    toast.success("New event creation initiated");
-    navigate("/setup");
-  };
   
   // Desktop sidebar
   const DesktopSidebar = () => (
@@ -84,15 +76,7 @@ const Sidebar = () => {
           ))}
         </nav>
       </div>
-      <div className="mt-auto p-4">
-        <Button 
-          className="w-full gap-2 bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90"
-          onClick={handleCreateNewEvent}
-        >
-          <PlusCircle className="h-4 w-4" />
-          <span>New Event</span>
-        </Button>
-      </div>
+      {/* New Event button has been removed from here */}
     </div>
   );
 
@@ -133,15 +117,7 @@ const Sidebar = () => {
             ))}
           </nav>
         </div>
-        <div className="mt-auto p-4">
-          <Button 
-            className="w-full gap-2"
-            onClick={handleCreateNewEvent}
-          >
-            <PlusCircle className="h-4 w-4" />
-            <span>New Event</span>
-          </Button>
-        </div>
+        {/* New Event button has been removed from here as well */}
       </SheetContent>
     </Sheet>
   );
