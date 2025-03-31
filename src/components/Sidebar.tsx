@@ -1,5 +1,5 @@
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +17,8 @@ import {
   SheetContent,
   SheetTrigger
 } from "@/components/ui/sheet";
+import { toast } from "sonner";
+import { useTheme } from "./ThemeProvider";
 
 const navItems = [
   {
@@ -48,6 +50,13 @@ const navItems = [
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { theme } = useTheme();
+  
+  const handleCreateNewEvent = () => {
+    toast.success("New event creation initiated");
+    navigate("/setup");
+  };
   
   // Desktop sidebar
   const DesktopSidebar = () => (
@@ -76,7 +85,10 @@ const Sidebar = () => {
         </nav>
       </div>
       <div className="mt-auto p-4">
-        <Button className="w-full gap-2 bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90">
+        <Button 
+          className="w-full gap-2 bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90"
+          onClick={handleCreateNewEvent}
+        >
           <PlusCircle className="h-4 w-4" />
           <span>New Event</span>
         </Button>
@@ -88,7 +100,11 @@ const Sidebar = () => {
   const MobileSidebar = () => (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" size="icon" className="md:hidden fixed top-4 left-4 z-40">
+        <Button 
+          variant="outline" 
+          size="icon" 
+          className={`md:hidden fixed top-4 left-4 z-40 ${theme === 'dark' ? 'border-gray-600 bg-gray-800 text-white' : 'border-gray-200'}`}
+        >
           <Menu className="h-5 w-5" />
           <span className="sr-only">Toggle Menu</span>
         </Button>
@@ -96,7 +112,7 @@ const Sidebar = () => {
       <SheetContent side="left" className="p-0 w-64">
         <div className="flex h-14 items-center border-b px-4 py-2">
           <Link to="/" className="flex items-center gap-2 font-semibold">
-            <Zap size={24} className="text-sidebar-primary" />
+            <Zap size={24} className="text-primary" />
             <span className="text-xl">Eventora Guru</span>
           </Link>
         </div>
@@ -107,8 +123,8 @@ const Sidebar = () => {
                 key={index}
                 to={item.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-all hover:text-sidebar-primary",
-                  location.pathname === item.href ? "bg-sidebar-accent text-sidebar-primary" : ""
+                  "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary",
+                  location.pathname === item.href ? "bg-accent text-accent-foreground font-medium" : ""
                 )}
               >
                 <item.icon className="h-5 w-5" />
@@ -118,7 +134,10 @@ const Sidebar = () => {
           </nav>
         </div>
         <div className="mt-auto p-4">
-          <Button className="w-full gap-2 bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90">
+          <Button 
+            className="w-full gap-2"
+            onClick={handleCreateNewEvent}
+          >
             <PlusCircle className="h-4 w-4" />
             <span>New Event</span>
           </Button>

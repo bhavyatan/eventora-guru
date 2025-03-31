@@ -46,6 +46,12 @@ export function ThemeProvider({
     }
     
     root.classList.add(theme);
+
+    // Apply stored accent color if available
+    const storedAccent = localStorage.getItem("accentColor");
+    if (storedAccent) {
+      document.documentElement.style.setProperty("--accent-color", storedAccent);
+    }
   }, [theme]);
 
   const value = {

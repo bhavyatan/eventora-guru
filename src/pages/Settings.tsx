@@ -16,18 +16,44 @@ import {
 } from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+
+const accentColors = [
+  { name: "blue", value: "#0ea5e9", class: "bg-blue-500" },
+  { name: "purple", value: "#8b5cf6", class: "bg-purple-500" },
+  { name: "green", value: "#10b981", class: "bg-green-500" },
+  { name: "amber", value: "#f59e0b", class: "bg-amber-500" },
+  { name: "red", value: "#ef4444", class: "bg-red-500" }
+];
 
 const Settings = () => {
   const { theme, setTheme } = useTheme();
   const [selectedTheme, setSelectedTheme] = useState(theme);
+  const [selectedAccent, setSelectedAccent] = useState<string>(accentColors[0].value);
 
   useEffect(() => {
     setSelectedTheme(theme);
+    const storedAccent = localStorage.getItem("accentColor");
+    if (storedAccent) {
+      setSelectedAccent(storedAccent);
+      document.documentElement.style.setProperty("--accent-color", storedAccent);
+    }
   }, [theme]);
 
   const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newTheme = e.target.value as "light" | "dark" | "system";
     setTheme(newTheme);
+  };
+
+  const handleAccentChange = (color: string) => {
+    setSelectedAccent(color);
+    document.documentElement.style.setProperty("--accent-color", color);
+    localStorage.setItem("accentColor", color);
+    toast.success("Accent color updated");
+  };
+
+  const handleSaveChanges = () => {
+    toast.success("Settings saved successfully");
   };
 
   return (
@@ -55,7 +81,7 @@ const Settings = () => {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="app-name">Application Name</Label>
-                <Input id="app-name" value="Eventora Guru" />
+                <Input id="app-name" defaultValue="Eventora Guru" />
               </div>
               
               <div className="space-y-2">
@@ -116,13 +142,21 @@ const Settings = () => {
               <div className="space-y-2">
                 <Label htmlFor="accent-color">Accent Color</Label>
                 <div className="grid grid-cols-5 gap-2">
-                  <div className="h-8 w-8 cursor-pointer rounded-full bg-blue-500 ring-2 ring-blue-500 ring-offset-2"></div>
-                  <div className="h-8 w-8 cursor-pointer rounded-full bg-purple-500"></div>
-                  <div className="h-8 w-8 cursor-pointer rounded-full bg-green-500"></div>
-                  <div className="h-8 w-8 cursor-pointer rounded-full bg-amber-500"></div>
-                  <div className="h-8 w-8 cursor-pointer rounded-full bg-red-500"></div>
+                  {accentColors.map((color) => (
+                    <div 
+                      key={color.value}
+                      className={`h-8 w-8 cursor-pointer rounded-full ${color.class} ${selectedAccent === color.value ? 'ring-2 ring-offset-2' : ''}`}
+                      onClick={() => handleAccentChange(color.value)}
+                      aria-label={`Select ${color.name} accent color`}
+                    />
+                  ))}
                 </div>
               </div>
+              
+              <Button onClick={handleSaveChanges} className="mt-4">
+                <Save className="h-4 w-4 mr-2" />
+                Save Appearance Settings
+              </Button>
             </CardContent>
           </Card>
         </TabsContent>
